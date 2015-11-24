@@ -10,6 +10,30 @@ use App\Controller\AppController;
  */
 class ArticlesController extends AppController
 {
+    //todo pagination
+ /*   public $paginate = [
+        'Orders' => [],
+        'Users' => [],
+        'Doughsize' => [],
+        'Cruststyle' => [],
+        'sortWhitelist' => [
+            'order_id', 'Users.name', ' orderdate', 'modified', 'iscompleted'
+        ],
+        'limit' => 20,
+        'order' => [
+            'Orders.iscompleted' => 'desc',
+            'Orders.order_id' => 'asc',
+            'Orders.modified' => 'asc'
+        ]
+    ];*/
+    
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->loadComponent('Flash'); // Include the FlashComponent
+    }
+    
 
     /**
      * Index method
@@ -18,11 +42,11 @@ class ArticlesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Articles', 'Users']
-        ];
+        $articles = $this->Articles->find('all')
+                    ->contain(['Users']);
+   
         $this->set('articles', $this->paginate($this->Articles));
-        $this->set('_serialize', ['articles']);
+        $this->set(compact('articles'));
     }
 
     /**
@@ -34,11 +58,8 @@ class ArticlesController extends AppController
      */
     public function view($id = null)
     {
-        $article = $this->Articles->get($id, [
-            'contain' => ['Articles', 'Users']
-        ]);
-        $this->set('article', $article);
-        $this->set('_serialize', ['article']);
+        $article = $this->Articles->get($id,['contain' => ['Users']]);
+        $this->set(compact('article'));
     }
 
     /**
@@ -50,6 +71,9 @@ class ArticlesController extends AppController
     {
         $article = $this->Articles->newEntity();
         if ($this->request->is('post')) {
+            //todo user session id add needed
+            $this->request->data['user_id'] = 1;
+            
             $article = $this->Articles->patchEntity($article, $this->request->data);
             if ($this->Articles->save($article)) {
                 $this->Flash->success(__('The article has been saved.'));
@@ -58,10 +82,7 @@ class ArticlesController extends AppController
                 $this->Flash->error(__('The article could not be saved. Please, try again.'));
             }
         }
-        $articles = $this->Articles->Articles->find('list', ['limit' => 200]);
-        $users = $this->Articles->Users->find('list', ['limit' => 200]);
-        $this->set(compact('article', 'articles', 'users'));
-        $this->set('_serialize', ['article']);
+        $this->set(compact('article'));
     }
 
     /**
@@ -73,9 +94,8 @@ class ArticlesController extends AppController
      */
     public function edit($id = null)
     {
-        $article = $this->Articles->get($id, [
-            'contain' => []
-        ]);
+        $article = $this->Articles->get($id,['contain' => ['Users']]);
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $article = $this->Articles->patchEntity($article, $this->request->data);
             if ($this->Articles->save($article)) {
@@ -85,10 +105,9 @@ class ArticlesController extends AppController
                 $this->Flash->error(__('The article could not be saved. Please, try again.'));
             }
         }
-        $articles = $this->Articles->Articles->find('list', ['limit' => 200]);
-        $users = $this->Articles->Users->find('list', ['limit' => 200]);
-        $this->set(compact('article', 'articles', 'users'));
-        $this->set('_serialize', ['article']);
+        
+        $user = $this->Articles->Users->get($article->user_id);
+        $this->set(compact('article', 'user'));
     }
 
     /**

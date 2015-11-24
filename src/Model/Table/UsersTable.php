@@ -31,8 +31,8 @@ class UsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
+        $this->belongsTo('Roles', [
+            'foreignKey' => 'role_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -46,13 +46,17 @@ class UsersTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->allowEmpty('username');
+            ->requirePresence('username', 'create')
+            ->notEmpty('username')
+            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
-            ->allowEmpty('password');
+            ->requirePresence('password', 'create')
+            ->notEmpty('password');
 
         $validator
-            ->allowEmpty('role');
+            ->requirePresence('role_id', 'create')
+            ->notEmpty('role_id');
 
         return $validator;
     }

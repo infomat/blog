@@ -1,4 +1,4 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New Article'), ['action' => 'add']) ?></li>
@@ -6,7 +6,7 @@
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="articles index large-9 medium-8 columns content">
+<div class="articles index large-10 medium-8 columns content">
     <h3><?= __('Articles') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
@@ -22,9 +22,9 @@
         <tbody>
             <?php foreach ($articles as $article): ?>
             <tr>
-                <td><?= $article->has('article') ? $this->Html->link($article->article->title, ['controller' => 'Articles', 'action' => 'view', $article->article->article_id]) : '' ?></td>
+                <td><?= h($article->article_id) ?></td>
                 <td><?= h($article->title) ?></td>
-                <td><?= $article->has('user') ? $this->Html->link($article->user->user_id, ['controller' => 'Users', 'action' => 'view', $article->user->user_id]) : '' ?></td>
+                <td><?= $article->has('user') ? $this->Html->link($article->user->username, ['controller' => 'Users', 'action' => 'view', $article->user->user_id]) : '' ?></td>
                 <td><?= h($article->created) ?></td>
                 <td><?= h($article->modified) ?></td>
                 <td class="actions">

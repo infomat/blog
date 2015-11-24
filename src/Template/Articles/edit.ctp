@@ -8,7 +8,6 @@
             )
         ?></li>
         <li><?= $this->Html->link(__('List Articles'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
@@ -17,10 +16,10 @@
 <div class="articles form large-9 medium-8 columns content">
     <?= $this->Form->create($article) ?>
     <fieldset>
-        <legend><?= __('Edit Article') ?></legend>
+        <legend><?= __('Edit Article')?></legend>
         <?php
+            echo '<h5>'.$article->user->username.'</h5>';
             echo $this->Form->input('title');
-            echo $this->Form->input('user_id', ['options' => $users]);
             echo $this->Form->input('body');
         ?>
     </fieldset>

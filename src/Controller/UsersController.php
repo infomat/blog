@@ -10,7 +10,14 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
-
+    //todo pagination sorting not working
+    public $paginate = [
+        'limit' => 25,
+        'users' => [
+        'Users.user_id' => 'asc'
+        ]
+    ];
+    
     /**
      * Index method
      *
@@ -18,11 +25,11 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users']
-        ];
-        $this->set('users', $this->paginate($this->Users));
-        $this->set('_serialize', ['users']);
+        $users = $this->Users->find('all')
+                    ->contain(['Roles'])
+                    ->order(['user_id' => 'ASC']);
+        $this->set('users', $this->paginate());
+        $this->set(compact('users'));
     }
 
     /**
@@ -35,9 +42,9 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Users']
+            'contain' => ['Roles']
         ]);
-        $this->set('user', $user);
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
 
@@ -58,8 +65,9 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Users->Users->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'users'));
+        $roles = $this->Users->Roles->find('list', ['keyField' => 'role_id',
+                            'valueField' => 'name'])->toArray();
+        $this->set(compact('user','roles'));
         $this->set('_serialize', ['user']);
     }
 
@@ -72,10 +80,10 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
+        $user = $this->Users->get($id,['contain' => ['Roles']]);
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
+            pr( $user);
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
@@ -84,9 +92,9 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Users->Users->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'users'));
-        $this->set('_serialize', ['user']);
+        $roles = $this->Users->Roles->find('list', ['keyField' => 'role_id',
+                            'valueField' => 'name'])->toArray();
+        $this->set(compact('user', 'roles'));
     }
 
     /**

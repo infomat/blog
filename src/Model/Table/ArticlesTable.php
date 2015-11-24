@@ -32,10 +32,6 @@ class ArticlesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Articles', [
-            'foreignKey' => 'article_id',
-            'joinType' => 'INNER'
-        ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
@@ -51,10 +47,12 @@ class ArticlesTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->allowEmpty('title');
+            ->requirePresence('title', 'create')
+            ->notEmpty('title');
 
         $validator
-            ->allowEmpty('body');
+            ->requirePresence('body', 'create')
+            ->notEmpty('body');
 
         return $validator;
     }
