@@ -14,6 +14,8 @@
                 <th><?= $this->Paginator->sort('article_id') ?></th>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('user_id') ?></th>
+                <th><?= $this->Paginator->sort('comments') ?></th>
+                <th><?= $this->Paginator->sort('tags') ?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
                 <th><?= $this->Paginator->sort('modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
@@ -25,6 +27,12 @@
                 <td><?= h($article->article_id) ?></td>
                 <td><?= h($article->title) ?></td>
                 <td><?= $article->has('user') ? $this->Html->link($article->user->username, ['controller' => 'Users', 'action' => 'view', $article->user->user_id]) : '' ?></td>
+                <td><?= $article->comment_count ? $this->Html->link($article->comment_count, ['controller' => 'Comments', 'action' => 'index', $article->article_id]) : '0' ?></td>
+                <td>
+                <?php foreach ($article->tags as $tag): ?>
+                <p class="tag"><?= $this->Html->link($tag->name, ['controller' => 'Tags', 'action' => 'index', $tag->tag_id]) ?></p>
+                <?php endforeach; ?>
+                </td>
                 <td><?= h($article->created) ?></td>
                 <td><?= h($article->modified) ?></td>
                 <td class="actions">

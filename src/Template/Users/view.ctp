@@ -15,10 +15,6 @@
             <td><?= h($user->username) ?></td>
         </tr>
         <tr>
-            <th><?= __('Password') ?></th>
-            <td><?= h($user->password) ?></td>
-        </tr>
-        <tr>
             <th><?= __('Role') ?></th>
             <td><?= h($user->role->name) ?></td>
         </tr>

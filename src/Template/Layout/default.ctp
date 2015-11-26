@@ -28,6 +28,7 @@ $cakeDescription = 'CakeBlog: Simple blog using cakePhp Framework';
 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('cake.css') ?>
+    <?= $this->Html->css('mystyle.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -40,11 +41,19 @@ $cakeDescription = 'CakeBlog: Simple blog using cakePhp Framework';
                 <h1><a href=""><?= $this->fetch('title') ?></a></h1>
             </li>
         </ul>
-        <section class="top-bar-section">
-            <ul class="right">
-                <li><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></li>
-            </ul>
+         <section class="top-bar-section">
+            <div id="status" class="right">  
+                <?php
+                if (is_null($this->request->session()->read('Auth.User.username'))) {
+                    $this->Html->link(__('Signup'), ['controller' => 'Users', 'action' => 'singup']);
+                    $this->Html->link(__('Login'), ['controller' => 'Users', 'action' => 'login']);
+
+                } else {
+                    echo "Welcome " . $this->request->session()->read('Auth.User.username'); 
+                    echo $this->Html->link('Sign Out', ['controller' => 'users', 'action' => 'logout']);
+                }
+                ?>
+            </div>
         </section>
     </nav>
     <?= $this->Flash->render() ?>

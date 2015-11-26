@@ -30,10 +30,20 @@ class CommentsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-
+        //In case just want to know number of comment not details
+        //To use this behaviour, just add column comment_count at Article Table
+        $this->addBehavior('CounterCache', [
+            'Articles' => ['comment_count']
+        ]);
+        
         $this->belongsTo('Articles', [
             'foreignKey' => 'article_id'
         ]);
+        
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id'
+        ]);
+
     }
 
     /**
@@ -56,8 +66,8 @@ class CommentsTable extends Table
             ->allowEmpty('isApproved');
 
         $validator
-            ->add('author', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('author');
+            ->add('user_id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('user_id');
 
         return $validator;
     }

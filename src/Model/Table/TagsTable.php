@@ -29,10 +29,10 @@ class TagsTable extends Table
         $this->displayField('name');
         $this->primaryKey('tag_id');
 
-        $this->belongsTo('Tags', [
-            'foreignKey' => 'tag_id',
-            'joinType' => 'INNER'
+        $this->belongsToMany('Tags', [
+            'joinTable' => 'article_tag',
         ]);
+
     }
 
     /**
@@ -44,7 +44,8 @@ class TagsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->allowEmpty('name');
+            ->requirePresence('name', 'create')
+            ->notEmpty('name');
 
         return $validator;
     }

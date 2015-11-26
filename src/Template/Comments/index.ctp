@@ -1,4 +1,4 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New Comment'), ['action' => 'add']) ?></li>
@@ -6,7 +6,7 @@
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="comments index large-9 medium-8 columns content">
+<div class="comments index large-10 medium-8 columns content">
     <h3><?= __('Comments') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
@@ -26,8 +26,8 @@
             <tr>
                 <td><?= $this->Number->format($comment->id) ?></td>
                 <td><?= h($comment->body) ?></td>
-                <td><?= h($comment->isApproved) ?></td>
-                <td><?= $this->Number->format($comment->author) ?></td>
+                <td><?= $comment->isApproved ? __('Yes') : __('No'); ?></td>
+                <td><?= $comment->has('user') ? $this->Html->link($comment->user->username, ['controller' => 'Users', 'action' => 'view', $comment->user->user_id]) : '' ?></td>
                 <td><?= $comment->has('article') ? $this->Html->link($comment->article->title, ['controller' => 'Articles', 'action' => 'view', $comment->article->article_id]) : '' ?></td>
                 <td><?= h($comment->created) ?></td>
                 <td><?= h($comment->modified) ?></td>

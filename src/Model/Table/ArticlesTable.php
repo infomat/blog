@@ -36,6 +36,21 @@ class ArticlesTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        
+        $this->hasMany('Comments', [
+            'className' => 'Comments',
+            'conditions' => ['isApproved' => true]
+        ]);
+
+        $this->hasMany('UnapprovedComments', [
+            'className' => 'Comments',
+            'conditions' => ['isApproved' => false],
+            'propertyName' => 'unapproved_comments'
+        ]);
+        
+        $this->belongsToMany('Tags', [
+            'joinTable' => 'article_tag',
+        ]);
     }
 
     /**

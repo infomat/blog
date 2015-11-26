@@ -1,4 +1,4 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Form->postLink(
@@ -12,7 +12,7 @@
         <li><?= $this->Html->link(__('New Tag'), ['controller' => 'Tags', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="tags form large-9 medium-8 columns content">
+<div class="tags form large-10 medium-8 columns content">
     <?= $this->Form->create($tag) ?>
     <fieldset>
         <legend><?= __('Edit Tag') ?></legend>

@@ -1,0 +1,33 @@
+#status {
+	color:#ffffff;
+	margin-right : 2em;
+    margin-left : 4em;
+}
+#status a {
+    color:#CCCC66;
+    margin-left : 4em;
+}
+
+#title a {
+   color:#362A1E; 
+    
+}
+
+.error {
+    color : red;
+}
+
+.commentid {
+   font-family: sans-serif;
+   color: #0033cc;
+   font-style: bold;
+}
+.commentrow {
+    border-bottom-color: cadetblue
+}
+
+.tag {
+    font-size: 80%;
+    margin:0;
+    padding:0;
+}

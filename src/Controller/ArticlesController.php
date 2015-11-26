@@ -43,8 +43,8 @@ class ArticlesController extends AppController
     public function index()
     {
         $articles = $this->Articles->find('all')
-                    ->contain(['Users']);
-   
+                    ->contain(['Users','Tags']);
+        
         $this->set('articles', $this->paginate($this->Articles));
         $this->set(compact('articles'));
     }
@@ -58,8 +58,15 @@ class ArticlesController extends AppController
      */
     public function view($id = null)
     {
-        $article = $this->Articles->get($id,['contain' => ['Users']]);
-        $this->set(compact('article'));
+        $article = $this->Articles->get($id,['contain' => ['Users','Comments']]);
+
+        $users = $this->Articles->Users->find('list',['keyField' => 'user_id',
+                            'valueField' => 'username'])
+                      ->toArray();
+
+            //, ['keyField' => 'user_id','valueField' => 'user_name'])
+            //        ->where(['user_id => $article->comments->user_id'])->to;
+        $this->set(compact('article','users'));
     }
 
     /**
@@ -72,7 +79,9 @@ class ArticlesController extends AppController
         $article = $this->Articles->newEntity();
         if ($this->request->is('post')) {
             //todo user session id add needed
-            $this->request->data['user_id'] = 1;
+            if ($this->request->session()->read('Auth.User.user_id') != null) {
+                $this->request->data['user_id'] = $this->request->session()->read('Auth.User.user_id');
+            }
             
             $article = $this->Articles->patchEntity($article, $this->request->data);
             if ($this->Articles->save($article)) {

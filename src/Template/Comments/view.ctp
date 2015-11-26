@@ -1,4 +1,4 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit Comment'), ['action' => 'edit', $comment->id]) ?> </li>
@@ -9,7 +9,7 @@
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
-<div class="comments view large-9 medium-8 columns content">
+<div class="comments view large-10 medium-8 columns content">
     <h3><?= h($comment->id) ?></h3>
     <table class="vertical-table">
         <tr>
@@ -25,7 +25,7 @@
             <td><?= $this->Number->format($comment->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('Author') ?></th>
+            <th><?= __('User') ?></th>
             <td><?= $this->Number->format($comment->author) ?></td>
         </tr>
         <tr>
