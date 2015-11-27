@@ -58,12 +58,13 @@ class CommentsController extends AppController
     {
         $comment = $this->Comments->newEntity();
         if ($this->request->is('post')) {
-            if ($this->request->session()->read('Auth.User.user_id') != null) {
-                $this->request->data['user_id'] = $this->request->session()->read('Auth.User.user_id');
-                $this->request->data['isApproved'] = 1;
-            }
             $comment = $this->Comments->patchEntity($comment, $this->request->data);
             $comment -> article_id = $article_id;
+            if ($this->Auth->user('user_id') != null) {
+                $comment->user_id = $this->Auth->user('user_id');
+                $comment->isApproved = 1;
+            }     
+
             if ($this->Comments->save($comment)) {
                 $this->Flash->success(__('The comment has been saved.'));
                 return $this->redirect(['controller' => 'Articles', 'action' => 'view', $article_id]);

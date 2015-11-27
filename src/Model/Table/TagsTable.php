@@ -29,10 +29,9 @@ class TagsTable extends Table
         $this->displayField('name');
         $this->primaryKey('tag_id');
 
-        $this->belongsToMany('Tags', [
-            'joinTable' => 'article_tag',
+        $this->belongsToMany('Articles', [
+            'joinTable' => 'articlestags',
         ]);
-
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Tags Controller
@@ -18,9 +19,9 @@ class TagsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Tags']
-        ];
+        $tags = $this->Tags->find('all')
+                    ->contain(['Articles']);
+ 
         $this->set('tags', $this->paginate($this->Tags));
         $this->set('_serialize', ['tags']);
     }
@@ -34,9 +35,7 @@ class TagsController extends AppController
      */
     public function view($id = null)
     {
-        $tag = $this->Tags->get($id, [
-            'contain' => ['Tags']
-        ]);
+        $tag = $this->Tags->get($id);
         $this->set('tag', $tag);
         $this->set('_serialize', ['tag']);
     }
@@ -46,23 +45,32 @@ class TagsController extends AppController
      *
      * @return void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($id = null)
     {
+        $articlesTable = TableRegistry::get('Articles');
+        $article = $articlesTable->newEntity();
+        if ($id != null) {
+            $article = $articlesTable->get($id);
+        }
+       
         $tag = $this->Tags->newEntity();
         if ($this->request->is('post')) {
             $tag = $this->Tags->patchEntity($tag, $this->request->data);
-            if ($this->Tags->save($tag)) {
+         //   $tag->_joinData = $this->Tags->articlestags->newEntity();
+        // $this->Tags->link($article, [$tag]);
+            $article->dirty('tags', true);  
+            if ($this->Tags->save($tag, ['associated' => ['Articles']])) {
                 $this->Flash->success(__('The tag has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Tags', 'action' => 'index']);  //Todo should go view
             } else {
                 $this->Flash->error(__('The tag could not be saved. Please, try again.'));
             }
         }
-        $tags = $this->Tags->Tags->find('list', ['limit' => 200]);
-        $this->set(compact('tag', 'tags'));
+        
+        $this->set(compact('tag'));
         $this->set('_serialize', ['tag']);
     }
-
+    
     /**
      * Edit method
      *
@@ -72,20 +80,18 @@ class TagsController extends AppController
      */
     public function edit($id = null)
     {
-        $tag = $this->Tags->get($id, [
-            'contain' => []
-        ]);
+        $tag = $this->Tags->get($id);
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tag = $this->Tags->patchEntity($tag, $this->request->data);
             if ($this->Tags->save($tag)) {
                 $this->Flash->success(__('The tag has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Articles', 'action' => 'index']);  //Todo should go view
             } else {
                 $this->Flash->error(__('The tag could not be saved. Please, try again.'));
             }
         }
-        $tags = $this->Tags->Tags->find('list', ['limit' => 200]);
-        $this->set(compact('tag', 'tags'));
+        $this->set(compact('tag'));
         $this->set('_serialize', ['tag']);
     }
 

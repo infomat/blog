@@ -58,7 +58,7 @@ class ArticlesController extends AppController
      */
     public function view($id = null)
     {
-        $article = $this->Articles->get($id,['contain' => ['Users','Comments']]);
+        $article = $this->Articles->get($id,['contain' => ['Users','Comments','Tags']]);
 
         $users = $this->Articles->Users->find('list',['keyField' => 'user_id',
                             'valueField' => 'username'])
@@ -78,12 +78,12 @@ class ArticlesController extends AppController
     {
         $article = $this->Articles->newEntity();
         if ($this->request->is('post')) {
-            //todo user session id add needed
-            if ($this->request->session()->read('Auth.User.user_id') != null) {
-                $this->request->data['user_id'] = $this->request->session()->read('Auth.User.user_id');
-            }
             
             $article = $this->Articles->patchEntity($article, $this->request->data);
+            //todo user session id add needed 
+            if ($this->Auth->user('user_id') != null) {
+                $article->user_id = $this->Auth->user('user_id');
+            }        
             if ($this->Articles->save($article)) {
                 $this->Flash->success(__('The article has been saved.'));
                 return $this->redirect(['action' => 'index']);

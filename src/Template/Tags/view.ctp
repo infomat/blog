@@ -5,8 +5,6 @@
         <li><?= $this->Form->postLink(__('Delete Tag'), ['action' => 'delete', $tag->tag_id], ['confirm' => __('Are you sure you want to delete # {0}?', $tag->tag_id)]) ?> </li>
         <li><?= $this->Html->link(__('List Tags'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Tag'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Tags'), ['controller' => 'Tags', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Tag'), ['controller' => 'Tags', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="tags view large-10 medium-8 columns content">

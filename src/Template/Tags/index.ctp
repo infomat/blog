@@ -9,8 +9,8 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('tag_id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
+                <th><?=  __('Blog') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -20,7 +20,6 @@
                 <td><?= $tag->has('tag') ? $this->Html->link($tag->tag->name, ['controller' => 'Tags', 'action' => 'view', $tag->tag->tag_id]) : '' ?></td>
                 <td><?= h($tag->name) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $tag->tag_id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $tag->tag_id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $tag->tag_id], ['confirm' => __('Are you sure you want to delete # {0}?', $tag->tag_id)]) ?>
                 </td>

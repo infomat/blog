@@ -23,7 +23,7 @@
             <td><?= h($article->title) ?></td>
         </tr>
         <tr>
-            <th><?= __('User') ?></th>
+            <th><?= __('Author') ?></th>
             <td><?= $article->has('user') ? $this->Html->link($article->user->username, ['controller' => 'Users', 'action' => 'view', $article->user->user_id]) : '' ?></td>
         </tr>
         <tr>
@@ -49,11 +49,11 @@
         <?php endforeach; ?>
     </div>
     <div class="row">
-        <h4><?= __('Tags') ?></h4>
-        <?php foreach ($article->comments as $comment): ?>
-            <div class="tagrow">
-                <p class="tag"><?= h($comment->body) ?></p>
-            </div>
+        <h4><?= __('Tags') ?> </h4>
+        <?php foreach ($article->tags as $tag): ?>
+        <p>
+            <?= h($tag->name) ?>
+        </p>
         <?php endforeach; ?>
     </div>
 </div>
