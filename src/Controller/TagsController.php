@@ -11,19 +11,31 @@ use Cake\ORM\TableRegistry;
  */
 class TagsController extends AppController
 {
-
+    
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
     /**
      * Index method
      *
      * @return void
      */
-    public function index()
+    public function index($id = null)
     {
-        $tags = $this->Tags->find('all')
-                    ->contain(['Articles']);
+        if ($id == null)
+        {
+            $tags = $this->Tags->find('all')
+                ->contain(['Articles']);
+        } else {
+            $tags = $this->Tags->find('all')
+                ->contain(['Articles'])
+                ->where(['Tags.tag_id' => $id]);
+        }
  
-        $this->set('tags', $this->paginate($this->Tags));
-        $this->set('_serialize', ['tags']);
+        $this->set('tags', $this->paginate($tags));
+        $this->set(compact('tags'));
     }
 
     /**
