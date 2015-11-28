@@ -20,6 +20,9 @@ class ArticlestagsTableTest extends TestCase
         'app.articlestags',
         'app.articles',
         'app.users',
+        'app.roles',
+        'app.comments',
+        'app.unapproved_comments',
         'app.tags'
     ];
 

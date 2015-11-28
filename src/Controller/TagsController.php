@@ -59,21 +59,19 @@ class TagsController extends AppController
      */
     public function add($id = null)
     {
-        $articlesTable = TableRegistry::get('Articles');
-        $article = $articlesTable->newEntity();
-        if ($id != null) {
-            $article = $articlesTable->get($id);
+        
+        if($id != null) {
+            $article['article']['article_id'] = $id;
         }
-       
-        $tag = $this->Tags->newEntity();
+        
+        $tag = $this->Tags->newEntity($this->request->data(),['associated' => ['Articles']]);
+
         if ($this->request->is('post')) {
-            $tag = $this->Tags->patchEntity($tag, $this->request->data);
-         //   $tag->_joinData = $this->Tags->articlestags->newEntity();
-        // $this->Tags->link($article, [$tag]);
-            $article->dirty('tags', true);  
-            if ($this->Tags->save($tag, ['associated' => ['Articles']])) {
+            $this->request->data['articles'] = $article;
+            $tag = $this->Tags->patchEntity($tag, $this->request->data , ['associated' => ['Articles']]);    
+            if ($this->Tags->save($tag)) {
                 $this->Flash->success(__('The tag has been saved.'));
-                return $this->redirect(['controller' => 'Tags', 'action' => 'index']);  //Todo should go view
+                return $this->redirect(['controller' => 'Articles', 'action' => 'index']);  //Todo should go view
             } else {
                 $this->Flash->error(__('The tag could not be saved. Please, try again.'));
             }

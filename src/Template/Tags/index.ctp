@@ -3,6 +3,7 @@
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New Tag'), ['action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Tag'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('List Article'), ['controller'=>'Articles','action' => 'index']) ?></li>
     </ul>
 </nav>
 <div class="tags index large-10 medium-8 columns content">
@@ -11,7 +12,7 @@
         <thead>
             <tr>
                 <th class="large-3"><?= $this->Paginator->sort('name') ?></th>
-                <th class="large-9"><?=  __('Blog Title') ?></th>
+                <th class="large-9"><?=  __('Article Title') ?></th>
             </tr>
         </thead>
         <tbody>
