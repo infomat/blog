@@ -73,7 +73,7 @@ class TagsController extends AppController
                 $this->Flash->success(__('The tag has been saved.'));
                 return $this->redirect(['controller' => 'Articles', 'action' => 'index']);  //Todo should go view
             } else {
-                $this->Flash->error(__('The tag could not be saved. Please, try again.'));
+                $this->Flash->error(__('The same tag already exist. Please, try with another tag again.'));
             }
         }
         

@@ -59,6 +59,7 @@ class TagsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['tag_id'], 'Tags'));
+        $rules->add($rules->isUnique(['name']));
         return $rules;
     }
 }
