@@ -38,19 +38,6 @@ class TagsController extends AppController
         $this->set(compact('tags'));
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Tag id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $tag = $this->Tags->get($id);
-        $this->set('tag', $tag);
-        $this->set('_serialize', ['tag']);
-    }
 
     /**
      * Add method

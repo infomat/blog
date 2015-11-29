@@ -76,10 +76,17 @@ class ArticlesController extends AppController
      */
     public function add()
     {
-        $article = $this->Articles->newEntity();
+        $tags = $this->Articles->Tags->find('list',['keyField' => 'tag_id',
+                                            'valueField' => 'name'])
+                     ->order(['name' => 'ASC']);
+        $article = $this->Articles->newEntity($this->request->data(),['associated' => ['Tags']]);
+
         if ($this->request->is('post')) {
+            $this->request->data['tags']['_ids'] = $this->request->data['_ids'];
+
+            $article = $this->Articles->patchEntity($article, $this->request->data, ['associated' => ['Tags']]);
+
             
-            $article = $this->Articles->patchEntity($article, $this->request->data);
             //todo user session id add needed 
             if ($this->Auth->user('user_id') != null) {
                 $article->user_id = $this->Auth->user('user_id');
@@ -91,7 +98,7 @@ class ArticlesController extends AppController
                 $this->Flash->error(__('The article could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('article'));
+        $this->set(compact('article','tags'));
     }
 
     /**
