@@ -86,4 +86,9 @@ class ArticlesTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         return $rules;
     }
+    
+    public function isOwnedBy($articleId, $userId)
+    {
+        return $this->exists(['id' => $articleId, 'user_id' => $userId]);
+    }
 }

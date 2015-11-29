@@ -18,9 +18,11 @@
         <legend><?= __('Edit Comment') ?></legend>
         <?php
             echo $this->Form->input('body');
-            echo $this->Form->input('isApproved');
-            echo $this->Form->input('user');
-            echo $this->Form->input('article_id', ['options' => $articles, 'empty' => true]);
+            if ($this->request->session()->read('Auth.User.role_id') == 1) {
+                echo $this->Form->input('isApproved');
+                echo $this->Form->input('user');
+                echo $this->Form->input('article_id', ['options' => $articles, 'empty' => true]);
+            }       
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

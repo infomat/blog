@@ -20,6 +20,11 @@ class UsersController extends AppController
     ];
     
     //Todo which function will be allowed
+    /* Initialize */
+    public function initialize()
+    {
+        parent::initialize();
+    }
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
@@ -28,14 +33,6 @@ class UsersController extends AppController
         // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['signup', 'logout']);
 
-        $this->Auth->logoutRedirect = array(
-          'controller' => 'articles',
-          'action' => 'index'
-        );
-        $this->Auth->loginRedirect = array(
-          'controller' => 'articles',
-          'action' => 'index'
-        );
     }
     
     public function login()
@@ -55,7 +52,6 @@ class UsersController extends AppController
         return $this->redirect($this->Auth->logout());
     }
     
-    
     /**
      * Index method
      *
@@ -63,11 +59,15 @@ class UsersController extends AppController
      */
     public function index()
     {
+        if ($this->request->session()->read('Auth.User.role_id')==1) {
         $users = $this->Users->find('all')
                     ->contain(['Roles'])
                     ->order(['user_id' => 'ASC']);
         $this->set('users', $this->paginate());
         $this->set(compact('users'));
+        } else {
+            $this->Flash->error(__('Unauthorized Access.'));
+        }
     }
 
     /**
@@ -173,5 +173,28 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    public function isAuthorized($user)
+    {
+        if ($user['role_id'] == 1){
+            if (in_array($this->request->action, ['delete'])) {
+                $user_id = (int)$this->request->params['pass'][0];
+                if ($user_id == $user['user_id']){
+                    return false;
+                }
+            }
+            return true;  
+        } else if ($user['role_id'] == 2){
+            // All registered users can add orders
+            // The owner of an order can edit and delete it
+            if (in_array($this->request->action, ['edit','view'])) {
+                $user_id = (int)$this->request->params['pass'][0];
+                if ($user_id == $user['user_id']) {
+                    return true;
+                }
+            }
+        }
+
+        return parent::isAuthorized($user);
     }
 }

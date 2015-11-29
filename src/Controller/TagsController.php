@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\Event\Event;
 
 /**
  * Tags Controller
@@ -16,6 +17,15 @@ class TagsController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Paginator');
+        // $this->loadComponent('Paginator');
+        $this->loadComponent('Flash'); // Include the FlashComponent
+    }
+    
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['index', 'view']);
+
     }
     /**
      * Index method
@@ -108,5 +118,27 @@ class TagsController extends AppController
             $this->Flash->error(__('The tag could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+         /**
+     * isAuthorized method
+     * Authorization depedning on role
+     * @param string|null $id Order id.
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function isAuthorized($user)
+    {
+        if (in_array($this->request->action, ['index', 'add']))
+            return true;
+        
+        // The owner of an order can edit and delete it
+        if (in_array($this->request->action, ['edit', 'delete', 'view'])) {
+            $tag_id = (int)$this->request->params['pass'][0];
+            if ($this->Comments->isOwnedBy($tag_id, $user['user_id'])) {
+                return true;
+            }
+        }
+        return parent::isAuthorized($user);
     }
 }

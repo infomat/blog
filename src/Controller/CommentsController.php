@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\Event\Event;
 /**
  * Comments Controller
  *
@@ -10,6 +10,19 @@ use App\Controller\AppController;
  */
 class CommentsController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+       // $this->loadComponent('Paginator');
+        $this->loadComponent('Flash'); // Include the FlashComponent
+    }
+    
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['index', 'view']);
+
+    }
 
     /**
      * Index method
@@ -145,5 +158,28 @@ class CommentsController extends AppController
             $this->Flash->error(__('The comment could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+
+      /**
+     * isAuthorized method
+     * Authorization depedning on role
+     * @param string|null $id Order id.
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function isAuthorized($user)
+    {
+        if (in_array($this->request->action, ['index', 'add']))
+            return true;
+        
+        // The owner of an order can edit and delete it
+        if (in_array($this->request->action, ['edit', 'delete', 'view'])) {
+            $comment_id = (int)$this->request->params['pass'][0];
+            if ($this->Comments->isOwnedBy($comment_id, $user['user_id'])) {
+                return true;
+            }
+        }
+        return parent::isAuthorized($user);
     }
 }
