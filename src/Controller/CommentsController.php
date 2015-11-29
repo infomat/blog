@@ -62,7 +62,9 @@ class CommentsController extends AppController
             $comment -> article_id = $article_id;
             if ($this->Auth->user('user_id') != null) {
                 $comment->user_id = $this->Auth->user('user_id');
-                $comment->isApproved = 1;
+                if ($this->Auth->user('role_id') == 1) {
+                    $comment->isApproved = 1;
+                }
             }     
 
             if ($this->Comments->save($comment)) {
@@ -77,6 +79,29 @@ class CommentsController extends AppController
         $this->set('_serialize', ['comment']);
     }
 
+     /**
+     * Approve method
+     *
+     * @param string|null $id Comment id.
+     * @return void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function approve($id = null)
+    {
+        $comment = $this->Comments->get($id, [
+            'contain' => ['Articles']
+        ]);
+        $comment->isApproved = 1;
+        
+        if ($this->Comments->save($comment)) {
+            $this->Flash->success(__('The comment has been saved.'));
+            return $this->redirect(['controller'=>'Articles','action' => 'index']);
+        } else {
+            $this->Flash->error(__('The comment could not be saved. Please, try again.'));
+        }
+    }
+
+    
     /**
      * Edit method
      *

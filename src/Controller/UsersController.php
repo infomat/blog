@@ -27,17 +27,14 @@ class UsersController extends AppController
         // You should not add the "login" action to allow list. Doing so would
         // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['signup', 'logout']);
-        $this->Auth->loginAction = array(
-          'controller' => 'users',
-          'action' => 'login'
-        );
+
         $this->Auth->logoutRedirect = array(
-          'controller' => 'users',
-          'action' => 'login'
+          'controller' => 'articles',
+          'action' => 'index'
         );
         $this->Auth->loginRedirect = array(
-          'controller' => 'posts',
-          'action' => 'add'
+          'controller' => 'articles',
+          'action' => 'index'
         );
     }
     

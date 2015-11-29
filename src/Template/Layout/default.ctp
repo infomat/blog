@@ -45,8 +45,8 @@ $cakeDescription = 'CakeBlog: Simple blog using cakePhp Framework';
             <div id="status" class="right">  
                 <?php
                 if (is_null($this->request->session()->read('Auth.User.username'))) {
-                    $this->Html->link(__('Signup'), ['controller' => 'Users', 'action' => 'singup']);
-                    $this->Html->link(__('Login'), ['controller' => 'Users', 'action' => 'login']);
+                    echo $this->Html->link(__('Signup'), ['controller' => 'users', 'action' => 'signup']);
+                    echo $this->Html->link(__('Login'), ['controller' => 'users', 'action' => 'login']);
 
                 } else {
                     echo "Welcome " . $this->request->session()->read('Auth.User.username'); 

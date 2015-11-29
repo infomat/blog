@@ -58,7 +58,7 @@ class ArticlesController extends AppController
      */
     public function view($id = null)
     {
-        $article = $this->Articles->get($id,['contain' => ['Users','Comments','Tags']]);
+        $article = $this->Articles->get($id,['contain' => ['Users','Comments','UnapprovedComments','Tags']]);
 
         $users = $this->Articles->Users->find('list',['keyField' => 'user_id',
                             'valueField' => 'username'])
