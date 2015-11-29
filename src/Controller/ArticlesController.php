@@ -63,9 +63,7 @@ class ArticlesController extends AppController
         $users = $this->Articles->Users->find('list',['keyField' => 'user_id',
                             'valueField' => 'username'])
                       ->toArray();
-
-            //, ['keyField' => 'user_id','valueField' => 'user_name'])
-            //        ->where(['user_id => $article->comments->user_id'])->to;
+        
         $this->set(compact('article','users'));
     }
 
@@ -76,10 +74,9 @@ class ArticlesController extends AppController
      */
     public function add()
     {
-        $tags = $this->Articles->Tags->find('list',['keyField' => 'tag_id',
-                                            'valueField' => 'name'])
-                     ->order(['name' => 'ASC']);
-        $article = $this->Articles->newEntity($this->request->data(),['associated' => ['Tags']]);
+        $tags = $this->Articles->Tags->find('list');
+        
+        $article = $this->Articles->newEntity();
 
         if ($this->request->is('post')) {
             $this->request->data['tags']['_ids'] = $this->request->data['_ids'];
@@ -110,10 +107,15 @@ class ArticlesController extends AppController
      */
     public function edit($id = null)
     {
-        $article = $this->Articles->get($id,['contain' => ['Users']]);
+        $taglist = $this->Articles->Tags->find('list');
+        
+        $article = $this->Articles->get($id,['contain' => ['Users','Tags']]);
         
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $article = $this->Articles->patchEntity($article, $this->request->data);
+            $this->request->data['tags']['_ids'] = $this->request->data['_ids'];
+            
+            $article = $this->Articles->patchEntity($article, $this->request->data, ['associated' => ['Tags']]);
+            
             if ($this->Articles->save($article)) {
                 $this->Flash->success(__('The article has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -121,9 +123,9 @@ class ArticlesController extends AppController
                 $this->Flash->error(__('The article could not be saved. Please, try again.'));
             }
         }
-        
-        $user = $this->Articles->Users->get($article->user_id);
-        $this->set(compact('article', 'user'));
+
+        $checkedtag = array_map(create_function('$o', 'return $o->tag_id;'), $article->tags);
+        $this->set(compact('article', 'taglist', 'checkedtag'));
     }
 
     /**

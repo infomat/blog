@@ -21,6 +21,12 @@
             echo '<h5>'.$article->user->username.'</h5>';
             echo $this->Form->input('title');
             echo $this->Form->input('body');
+            
+            echo "<label class='tags_label'>Select Tags</label>";
+            echo "<div class='mytags'>";
+            echo $this->Form->select('_ids',$taglist,['multiple' => 'checkbox', 'default' => $checkedtag]);
+           
+            echo "</div>";
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -50,8 +50,7 @@ class TagsController extends AppController
         if($id != null) {
             $article['article']['article_id'] = $id;
         }
-        
-        $tag = $this->Tags->newEntity($this->request->data(),['associated' => ['Articles']]);
+        $tag = $this->Tags->newEntity();
 
         if ($this->request->is('post')) {
             $this->request->data['articles'] = $article;
