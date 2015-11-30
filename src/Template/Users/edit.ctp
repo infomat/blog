@@ -9,6 +9,7 @@
         ?></li>
         <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Articles'), ['controller'=>'Articles','action' => 'index']) ?></li>
     </ul>
 </nav>
 <div class="users form large-10 medium-8 columns content">

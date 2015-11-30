@@ -132,10 +132,9 @@ class TagsController extends AppController
         if (in_array($this->request->action, ['index', 'add']))
             return true;
         
-        // The owner of an order can edit and delete it
+        // The admin can edit,delete
         if (in_array($this->request->action, ['edit', 'delete', 'view'])) {
-            $tag_id = (int)$this->request->params['pass'][0];
-            if ($this->Comments->isOwnedBy($tag_id, $user['user_id'])) {
+            if ($user['role_id'] == 1) {
                 return true;
             }
         }

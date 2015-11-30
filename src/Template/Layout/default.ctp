@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'CakeBlog: Simple blog using cakePhp Framework';
+$cakeDescription = 'CakeBlog';
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,6 +35,11 @@ $cakeDescription = 'CakeBlog: Simple blog using cakePhp Framework';
     <?= $this->fetch('script') ?>
 </head>
 <body>
+    <header>
+        <h1 id="title">
+            <?=$this->Html->link(__($cakeDescription), ['controller' => 'articles', 'action' => 'index']);?>
+        </h1>
+    </header>
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-2 medium-4 columns">
             <li class="name">

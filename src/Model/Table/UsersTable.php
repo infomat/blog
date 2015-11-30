@@ -35,6 +35,13 @@ class UsersTable extends Table
             'foreignKey' => 'role_id',
             'joinType' => 'INNER'
         ]);
+        
+        $this->hasMany('Articles', [
+            'className' => 'Articles',
+            'dependent'=>true // true without single quote
+        ]);
+        
+        
     }
 
     /**

@@ -32,6 +32,7 @@
                 <td><?= h($comment->created) ?></td>
                 <td><?= h($comment->modified) ?></td>
                 <td class="actions">
+                    <?= $comment->isApproved ? '' :$this->Html->link(__('Approve'), ['controller'=>'comments','action' => 'approve', $comment->id]) ?>
                     <?= $this->Html->link(__('View'), ['action' => 'view', $comment->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $comment->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $comment->id], ['confirm' => __('Are you sure you want to delete # {0}?', $comment->id)]) ?>
@@ -39,6 +40,7 @@
             </tr>
             <?php endforeach; ?>
         </tbody>
+     <p class="mynotice">* Comment will be posted after appoval of admin</p>
     </table>
     <div class="paginator">
         <ul class="pagination">

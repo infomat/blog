@@ -39,6 +39,7 @@
                 <td><?= h($article->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('AddComment'), ['controller'=>'Comments', 'action' => 'add', $article->article_id]) ?>
+                    <?= $this->Html->link(__('AddTag'), ['controller'=>'Tags', 'action' => 'add', $article->article_id]) ?>
                     <?= $this->Html->link(__('View'), ['action' => 'view', $article->article_id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $article->article_id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $article->article_id], ['confirm' => __('Are you sure you want to delete # {0}?', $article->article_id)]) ?>

@@ -43,30 +43,15 @@
         <h4><?= __('Comments') ?></h4>
         <?php foreach ($article->comments as $comment): ?>
             <div class="commentrow">
-                <h5 class="commentid">User: <?=$comment->user_id==null ? "Anonymous" : $users[$comment->user_id] ?> </h5>
+                <h5 class="commentid"><?=$comment->user_id==null ? "Anonymous" : $users[$comment->user_id] ?> </h5>
                 <p class="comment"><?= h($comment->body) ?></p>
             </div>
         <?php endforeach; ?>
-        <h4><?= __('Unapproved Comments') ?></h4>
-        <table cellpadding="0" cellspacing="0">
-        <?php foreach ($article->unapproved_comments as $uncomment): ?>
-            <tr>
-            <div class="commentrow">
-                <td>
-                <h5 class="commentid">User: <?=$uncomment->user_id==null ? "Anonymous" : $users[$uncomment->user_id] ?> </h5>
-                </td>
-                <td>
-                <p class="comment"><?= h($uncomment->body) ?></p>
-                </td>
-                <td class="actions">
-                    <?= $this->Html->link(__('Approve'), ['controller'=>'comments','action' => 'approve', $uncomment->id]) ?>
-                    <?= $this->Html->link(__('View'), ['controller'=>'comments','action' => 'view', $uncomment->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller'=>'comments','action' => 'edit', $uncomment->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller'=>'comments','action' => 'delete', $uncomment->comment_id], ['confirm' => __('Are you sure you want to delete # {0}?', $uncomment->id)]) ?>
-                 </td>
-            </div>
-            </tr>
-        <?php endforeach; ?>
+        <?php
+        if ($this->request->session()->read('Auth.User.role_id') == 1) {
+            echo $this->element('v_article_uncomment_admin');
+        }
+        ?>
         </table>
     </div>
     <div class="row">

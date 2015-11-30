@@ -20,7 +20,7 @@ class CommentsController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['index', 'view']);
+        $this->Auth->allow(['index']);
 
     }
 
@@ -31,15 +31,27 @@ class CommentsController extends AppController
      */
     public function index($id = null)
     {
-        //$id will be Article ID. If it is null it will display all comments.
-        if ($id == null) {
-            $this->paginate = [
-                'contain' => ['Articles','Users']
-            ];
+        if ($this->request->session()->read('Auth.User.role_id') == 1){
+            //$id will be Article ID. If it is null it will display all comments.
+            if ($id == null) {
+                 $comments = $this->Comments->find('all')
+                    ->contain(['Articles','Users']);
+            } else {
+                 $comments = $this->Comments->find('all')
+                        ->contain(['Articles','Users'])
+                        ->where(['Comments.article_id' => $id]);
+            }
         } else {
-             $comments = $this->Comments->find('all')
+             //$id will be Article ID. If it is null it will display all comments.
+            if ($id == null) {
+                 $comments = $this->Comments->find('all')
                     ->contain(['Articles','Users'])
-                    ->where(['Comments.article_id' => $id]);
+                    -> where(['Comments.isApproved' => 1]); 
+            } else {
+                 $comments = $this->Comments->find('all')
+                        ->contain(['Articles','Users'])
+                        ->where(['Comments.article_id' => $id, 'Comments.isApproved' => 1]);
+            }
         }
         
         $this->set('comments', $this->paginate($this->Comments));

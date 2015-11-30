@@ -7,10 +7,11 @@
     color:#CCCC66;
     margin-left : 4em;
 }
-
+header {
+    background-color: #116D76;
+}
 #title a {
-   color:#362A1E; 
-    
+   color:#FAFAFA; 
 }
 
 .error {
@@ -19,8 +20,12 @@
 
 .commentid {
    font-family: sans-serif;
-   color: #0033cc;
+   color: #1798B8;
    font-style: bold;
+}
+.comment {
+    display:inline-block;
+    text-align: left;
 }
 .commentrow {
     border-bottom-color: cadetblue
@@ -56,4 +61,10 @@
 
 td{
     word-wrap: break-word;
+}
+
+.mynotice {
+    font-size: 80%;
+    color:#C2140B;
+    text-align: right;
 }

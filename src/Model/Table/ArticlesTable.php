@@ -39,13 +39,15 @@ class ArticlesTable extends Table
         
         $this->hasMany('Comments', [
             'className' => 'Comments',
-            'conditions' => ['isApproved' => true]
+            'conditions' => ['isApproved' => true],
+            'dependent'=>true // true without single quote
         ]);
 
         $this->hasMany('UnapprovedComments', [
             'className' => 'Comments',
             'conditions' => ['isApproved' => false],
-            'propertyName' => 'unapproved_comments'
+            'propertyName' => 'unapproved_comments',
+            'dependent'=>true // true without single quote
         ]);
         
         $this->belongsToMany('Tags', [
@@ -89,6 +91,6 @@ class ArticlesTable extends Table
     
     public function isOwnedBy($articleId, $userId)
     {
-        return $this->exists(['id' => $articleId, 'user_id' => $userId]);
+        return $this->exists(['article_id' => $articleId, 'user_id' => $userId]);
     }
 }

@@ -15,7 +15,9 @@
             echo $this->Form->input('body',['label' => 'Comment']);
 //Todo Admin is needed            echo $this->Form->input('isApproved');
         ?>
+        <p class="mynotice">* Comment will be posted after appoval of admin</p>
     </fieldset>
+    
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
